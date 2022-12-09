@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% extends "bootstrap/base.html" %}
+    {% import "bootstrap/wtf.html" as wtf %}
+    {% block title %}
+         Gymstore - Homepage
+    {% endblock %}
+    <!-- Bootstrap CSS -->
+
+
+    {% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{url_for('.static', filename='css/bootstrap.min.css')}}">
+     <!-- JQuery -->
+ <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="{{url_for('.static', filename='css/style.css')}}">
+    <meta id="my-data" data-id="{{current_user.id}}" data-name="{{ current_user.username }}" data-email="{{ current_user.email }}" data-delivery="{{ current_user.delivery }}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <!-- Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.2/dist/vue.global.js"></script>
+    {% endblock %}
+
+
+
+
+
+  </head>
+  {% block content %}
+  <body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="col-12"></div>
+        </div>
+    </div>
+    <!-- End Top Bar -->
+
+    <!-- Navigation bar -->
+    <div id="app">
+    <nav class="navbar bg-light navbar-light navbar-expand-lg navbar-fixed-top">
+        <div class="container">
+            <a href="{{ url_for('index') }} class="navbar-brand"><span id="logo" title="logo">huuge</span></a>
+
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link">Store</a></li>
+                    <li class="nav-item"><a href="{{ url_for('login') }}" class="nav-link active">My Account</a></li>
+                </ul>
+
+                <ul class="navbar-nav mr">
+                    <li class="nav-item"><a href="{{ url_for('cart') }}" class="nav-link"><i id="shoppingcart" class="fas fa-shopping-cart"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+   <!-- End Navigation Bar -->
+
+   <!-- Smart Business content -->
+   <div id="vueApp" class="container">
+    <div class="row my-5">
+        <h1 class="mx-auto cart_title main">Your Cart</h1>
+        <div class="table-responsive my-5">
+            <table class="table table-borderless">
+                <thead>
+                <tr>
+                    <th scope="col" style="width: 50.2%;" class="cart_header">Product Details</th>
+                    <th scope="col" style="width: 16.6%;" class="cart_header">Price</th>
+                    <th scope="col" style="width: 16.6%;" class="cart_header">Quantity</th>
+                    <th scope="col" style="width: 16.6%;" class="cart_header">Total</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr v-for="(item,i) in cartItems" style="height: 100px;">
+                    <td scope="row" class="align-middle">
+                        <div class="cart_product_details">
+                            <div class="cart_product_description">
+                                <p>[[item.productName]]</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="align-middle">$[[item.price.toFixed(2)]]</td>
+                    <td class="align-middle">
+                        <p>[[item.quantity]]</p>
+                    </td>
+                    <td class="align-middle" >[[computeItemPrice(item.price,item.quantity)]]</td>
+                    <td class="align-middle"><a href="" @click="removeItem(item)"><i id="shoppingcart" class="fas fa-trash"></i></a></td>
+                </tr>
+                <tr v-if="cartItems.length == 0">
+                    <td scope="row" class="align-middle">
+                        Empty Cart...
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row my-5">
+        <div class="col-md-6 my-4">
+         <h1 class="cart_title row2">Promo code</h1>
+         <p class="cart_text promo_code">Enter Coupon Code</p>
+         <input type="text" class="cart_promocode">
+         <button onclick="" class="button-huuge my-5">Apply</button>
+        </div>
+
+        <div class="col-md-6 my-4">
+            <h1 class="cart_title row2">Cart Summary</h1>
+
+            <div class="row">
+                <div class="col-6">
+                    <span class="cart_text summary">Subtotal: </span>
+                    <span class="cart_text summary">Shipping: </span>
+                    <span class="cart_text summary">Grant total:</span>
+                </div>
+                <div class="col-6">
+                    <span class="cart_text summary_pricing" >$[[total]]</span>
+                    <span class="cart_text summary_pricing">$0.00</span>
+                    <span class="cart_text summary_pricing">$[[total]]</span>
+                </div>
+              </div>
+
+           <div class="row">
+               <div class="col-6">
+                    <button onclick="{{ url_for('index') }}" class="button-huuge cart my-3">Keep Shopping</button>
+               </div>
+               <div class="col-6">
+                <button onclick="{{ url_for('checkout') }}" class="button-huuge cart blue my-3" @click="placeOrder">Continue</button>
+           </div>
+           </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Smart Business content -->
+
+<script>
+    var user = $('#my-data').data();
+    console.log(user)
+    var get_cart_URL = "http://localhost:5007/cart/" + user.id;
+    var update_Cart_URL = "http://localhost:5007/updateCart/" + user.id;
+    var newCart = "http://localhost:5007/newCart/" + user.id;
+    var place_Order_URL = "http://localhost:5100/place_order"
+    var process_payment_URL = "http://localhost:5100/process_payment"
+
+    // console.log("Im here!")
+
+    const vueApp = Vue.createApp({
+        data() {
+            return {
+                uid: user.id,
+                cartItems : [],
+                total : 0,
+                delivery : user.delivery,
+                isloading : true
+            }
+        },
+        methods: {
+            getAllCartItems() {
+                //for testing without calling api
+            //     this.cartItems = [
+            //     {
+            //         "price": 1.8,
+            //         "productID": 3,
+            //         "productName": "Apple",
+            //         "quantity": 4
+            //     },
+            //     {
+            //         "price": 1.5,
+            //         "productID": 4,
+            //         "productName": "Orange",
+            //         "quantity": 5
+            //     }
+            // ];
+
+                // Uncomment this when inegreating
+                const response = fetch(get_cart_URL)
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(response);
+                                    if(data.code == 400){
+                                        this.message = data.message
+                                        const response = fetch(newCart,{
+                                            method : "POST"
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            console.log(response);
+                                            if(data.code == 400){
+                                                this.message = data.message
+
+                                            }else{
+                                                console.log(data)
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.log(this.message + error)
+                                        });
+                                    }else{
+                                        console.log(data)
+                                        if( Object.keys(data.data.cartItems).length !== 0){
+                                            this.cartItems = data.data.cartItems;
+                                            this.computeTotal();
+                                        }
+                                        console.log(this.cartItems)
+                                    }
+                                })
+                                .catch(error => {
+                                    console.log(this.message + error)
+                                });
+            },
+            computeItemPrice(item,price){
+                return "$" + (item * price).toFixed(2)
+            },
+            removeItem(item){
+                this.cartItems = this.cartItems.filter((x)=> x.productID != item.productID)
+                var items = JSON.stringify({
+                    "cartItems":this.cartItems
+                })
+                //--> for updating cart items in db
+                var response = fetch(update_Cart_URL,{
+                                    method: "PUT",
+                                    headers:{
+                                        "content-type" : "application/json"
+                                    },
+                                    body : items
+                                })
+
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data)
+                                    var result = data.data
+                                    console.log(result)
+                                    switch (data.code){
+                                        case 201:
+                                            this.getAllCartItems()//update cart items
+                                            this.computeTotal()
+                                            break;
+                                        case 400:
+                                        case 500:
+                                            var error = data.message
+                                        default:
+                                            throw `${data.code}: ${data.message}`;
+                                    }
+                                });
+            },
+            removeAllItem(){
+                var items = JSON.stringify({
+                    "cartItems" : []
+                })
+                var response = fetch(update_Cart_URL,{
+                                    method: "PUT",
+                                    headers:{
+                                        "content-type" : "application/json"
+                                    },
+                                    body : items
+                                })
+
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data)
+                                    var result = data.data
+                                    console.log(result)
+                                    switch (data.code){
+                                        case 201:
+                                            this.getAllCartItems()//update cart items
+                                            this.computeTotal()
+                                            break;
+                                        case 400:
+                                        case 500:
+                                            var error = data.message
+                                        default:
+                                            throw `${data.code}: ${data.message}`;
+                                    }
+                                });
+
+            },
+            computeTotal(){
+                var total = 0;
+                this.cartItems.forEach(item => {
+                    total += item.quantity * item.price
+                });
+                this.total = total.toFixed(2);
+                return total.toFixed(2);
+            },
+            placeOrder(){
+                order = JSON.stringify({
+                    "data" : {
+                        "custID" : this.uid,
+                        "cartItems" : this.cartItems,
+                        "delivery" : this.delivery,
+                        "total" : this.computeTotal()
+                    }
+                })
+                var response = fetch(place_Order_URL,{
+                                    method: "POST",
+                                    headers:{
+                                        "content-type" : "application/json"
+                                    },
+                                    body : order
+                                })
+
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data)
+                                    this.removeAllItem();
+                                    this.getAllCartItems();//update cart items
+                                    this.computeTotal();
+                                    window.open(data["paymentResult"]["data"]["payment_url"], '_blank')
+                                    var paymentResp = fetch(process_payment_URL,{
+                                        method : "POST",
+                                        headers:{
+                                        "content-type" : "application/json"
+                                        },
+                                        body : JSON.stringify(data)
+                                    })
+                                    .then(paymentResp => paymentResp.json())
+                                    .then(data2 =>{
+                                        console.log(data2)
+                                        switch (data2.code){
+                                            case 200:
+                                                window.location.replace("http://localhost:5003/");
+                                                break;
+                                            case 400:
+                                            case 500:
+                                                var error = data2.message
+                                            default:
+                                                throw `${data2.code}: ${data2.message}`;
+                                        }
+                                    })
+
+                                });
+            }
+        },
+        created(){
+            this.getAllCartItems();
+        },
+        delimiters: ['[[',']]']
+    })
+    const vm = vueApp.mount('#vueApp')
+</script>
+
+
+<!-- Footer -->
+
+<div class="container">
+    <div class="row my-5">
+        <div class="col-md-4 my-4">
+            <p class="footer-title">HUUGE.space</p>
+            <p class="footer-text">We are bunch young aspiring techpreneurs’, who have been working together for several years.</p>
+            <p class="footer-copyright">Copyright © 2020 Huuge.space. All rights reserved.</p>
+        </div>
+
+        <div class="col-md-4 my-4 text-center py-1 justify-content-center footer-2">
+            <p class="font-weight-bold">Follow Us</p>
+           <p><i class="fab fa-facebook"></i> <a href="">Facebook</a></p>
+           <p><i class="fab fa-instagram"></i> <a href="">Instagram</a></p>
+        </div>
+
+        <div class="col-md-4 my-4 py-1 justify-content-center footer-3">
+            <p class="font-weight-bold">Quick Links</p>
+           <p><a href="#">Terms of Service</a></p>
+           <p><a href="#">Privacy Policy</a></p>
+           <p><a href="#">Refund Policy</a></p>
+           <p><a href="#">Shipping Policy</a></p>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+    {% block javascript %}
+
+
+    <!-- Vue -->
+    <script src="{{url_for('.static', filename='/js/jquery-3.5.1.slim.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='/js/popper.min.js')}}"></script>
+
+    {% endblock %}
+  </body>
+</html>

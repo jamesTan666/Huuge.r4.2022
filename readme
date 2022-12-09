@@ -1,0 +1,34 @@
+
+#####docker running code
+step1
+docker-compose build
+
+step2
+docker-compose up
+
+step3
+docker-compose up -d
+
+step4
+
+docker run --rm -d --name=order1 --network=huuger42022_kong-net -e dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/gym_orders gym_delivery/order:1.0
+
+
+docker run --rm -d --name=order2 --network=huuger42022_kong-net -e dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/gym_orders gym_delivery/order:1.0
+
+step5
+docker-compose logs -f place_order
+
+
+below are some of the code u might need it
+
+docker stop rabbitmq-mgmt
+docker start rabbitmq-mgmt
+docker system prune -a     //delete all network
+docker network create my-net
+docker network ls
+
+Name: default
+Kong Admin URL: http://kong:8001
+
+orderapi = http://order:5001/order

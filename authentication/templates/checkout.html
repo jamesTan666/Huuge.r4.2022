@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% extends "bootstrap/base.html" %}
+    {% import "bootstrap/wtf.html" as wtf %}
+    {% block title %}
+         Gymstore - Payment
+    {% endblock %}
+    <!-- Bootstrap CSS -->
+
+    
+    
+    {% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{url_for('.static', filename='css/bootstrap.min.css')}}">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="{{url_for('.static', filename='css/style.css')}}">
+    <meta id="my-data" data-id="{{current_user.id}}" data-name="{{ current_user.username }}" data-email="{{ current_user.email }}" data-delivery="{{ current_user.delivery }}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <!-- Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.2/dist/vue.global.js"></script>
+    {% endblock %} 
+
+
+    
+   
+    
+
+  </head>
+  {% block content %}
+  <body>
+    
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="col-12"></div>
+        </div>
+    </div>
+    <!-- End Top Bar -->
+ 
+    <!-- Navigation bar -->
+    <div id="app">
+    <nav class="navbar bg-light navbar-light navbar-expand-lg navbar-fixed-top">
+        <div class="container">
+            <a href="{{ url_for('index') }} class="navbar-brand"><span id="logo" title="logo">huuge</span></a>
+
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link">Store</a></li>
+                    <li class="nav-item"><a href="{{ url_for('login') }}" class="nav-link active">My Account</a></li>
+                </ul>
+
+                <ul class="navbar-nav mr">
+                    <li class="nav-item"><a href="{{ url_for('cart') }}" class="nav-link"><i id="shoppingcart" class="fas fa-shopping-cart"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+   <!-- End Navigation Bar -->
+    
+   <!-- Smart Business content -->
+   <div class="container">
+    <div class="row my-5">
+        <h1 class="mx-auto cart_title main">Payment Details</h1>
+    </div>
+    <div class="row my-5">
+        <div class="col-md-6 my-4">
+            <h1 class="cart_title row2">Information</h1>
+
+            <form>
+                <div class="txt_field">
+                    <p for="">Email Address</p>
+                    <input type="text" name="" class="payment_txtbox" value="{{current_user.email}}" readonly>
+                </div>
+                <div class="txt_field">
+                    <p for="">Ship to</p>
+                    <input type="text" name="" class="payment_txtbox" value="{{current_user.delivery}}" readonly>
+                </div>
+                <div class="txt_field">
+                    <p for="">Shipping method</p>
+                    <input type="text" name="" class="payment_txtbox" value="Huuge Delivery" readonly>
+                    
+                </div>
+            </form>
+
+            
+        </div>
+        <div class="col-md-1 my-4"></div>
+        <div class="col-md-5 my-4">
+            <h1 class="cart_title row2">Total Summary</h1>
+            <span class="cart_text summary_pricing" >$[[total]]</span>
+            <span class="cart_text summary_pricing">$0.00</span>
+            <span class="cart_text summary_pricing">$[[total]]</span>
+            
+           <div class="row my-5">
+               <div class="col-6">
+                    <button onclick="{{ url_for('cart') }}" class="button-huuge cart my-3">Back to Cart</button>
+               </div>
+               <div class="col-6">
+                <button onclick="document.location.href='checkout.html'" class="button-huuge cart blue my-3">Pay Now</button>
+           </div>
+           </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Smart Business content -->
+
+
+
+<!-- Footer -->
+
+<div class="container">
+    <div class="row my-5">
+        <div class="col-md-4 my-4">
+            <p class="footer-title">HUUGE.space</p>
+            <p class="footer-text">We are bunch young aspiring techpreneurs’, who have been working together for several years.</p>
+            <p class="footer-copyright">Copyright © 2020 Huuge.space. All rights reserved.</p>
+        </div>
+
+        <div class="col-md-4 my-4 text-center py-1 justify-content-center footer-2">
+            <p class="font-weight-bold">Follow Us</p>
+           <p><i class="fab fa-facebook"></i> <a href="">Facebook</a></p>
+           <p><i class="fab fa-instagram"></i> <a href="">Instagram</a></p>
+        </div>
+
+        <div class="col-md-4 my-4 py-1 justify-content-center footer-3">
+            <p class="font-weight-bold">Quick Links</p>
+           <p><a href="#">Terms of Service</a></p>
+           <p><a href="#">Privacy Policy</a></p>
+           <p><a href="#">Refund Policy</a></p>
+           <p><a href="#">Shipping Policy</a></p>
+        </div>
+    </div>
+</div>
+
+    
+{% endblock %}
+{% block javascript %}
+
+    
+    <script src="{{url_for('.static', filename='/js/jquery-3.5.1.slim.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='/js/popper.min.js')}}"></script>
+{% endblock %}
+</body>
+</html>

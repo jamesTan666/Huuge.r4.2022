@@ -1,0 +1,16 @@
+docker build -t project/order:1.0 ./
+docker run -p 5001:5001 -e dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/project project/order:1.0
+
+
+
+// my-network
+docker run --name order --network my-net -e dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/project project/order:1.0
+
+
+
+##################
+docker running code
+
+docker-compose build order
+
+docker-compose up order
